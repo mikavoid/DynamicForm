@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  padding: 0;
+  padding-top:100px;
+  font-family: sans-serif;
+  color: #444;
+}
+
+textarea, input, select {
+  background: #ededed!important;
+  font-weight: bold;
+  padding-left: 15px!important;
+}
+
+select {
+  cursor: pointer;
+}
+
+select option {
+  font-weight: bold;
+  padding: 10px;
+}
+
+input[type="text"] + label {
+  padding-top: 0px;
+  padding-left: 15px;
+}
+
+input[type="text"] + label.active, h5 {
+  font-weight: bold;
+  padding-left:0;
+  font-size:18px;
+  color:#26a69a;
+}
+
+.item {
+  display: inline-block;
+  margin-right: 35px;
+}
+
+h4 {
+  padding: 10px 0;
+  border-bottom: #ddd 2px solid;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* h4:before {
+  content: '\25B6';
+  font-weight: bold;
+  display: inline-block;
+  font-size: 100%;
+  color: #DDD;
+  margin-right:25px;
+} */
+
+
+.flex-row {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  margin-bottom:20px;
+}
+
+.flex-row h5 {
+  width: 50%;
+  font-size: 100%;
+  font-weight: 700;
+}
+.flex-row h5 + div {
+  width: 100%;
+  display:flex;
+}
+
+.flex-row h5 + div textarea {
+  align-self: auto
+}
