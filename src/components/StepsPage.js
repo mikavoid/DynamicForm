@@ -1,6 +1,8 @@
 // Show a single page
 import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+
 import _ from 'lodash'
 
 import StepsField from './StepsField'
@@ -45,7 +47,7 @@ class StepsPage extends Component
   }
 
   render() {
-    const { page, pageNumber } = this.props
+    const { page, pageNumber, form } = this.props
     return (
       <div className={`page_${pageNumber}`}>
         {this.renderPage(page)}
@@ -54,7 +56,11 @@ class StepsPage extends Component
   }
 }
 
+function mapStateToProps({ form }) {
+  return { form: form }
+}
+
 export default reduxForm({
   form: 'dossier',
   destroyOnUnmount: false
-})(StepsPage)
+})(connect(mapStateToProps)(StepsPage))

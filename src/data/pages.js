@@ -4,6 +4,7 @@ export const page_0 = [
     label: 'Catégorie de votre projet',
     name: '0_categorie',
     items: [
+      {value: '', label: 'Selectionner votre catégorie'},
       {value: 'Culture'},
       {value: 'Sport'}
     ],
@@ -40,5 +41,23 @@ export const page_2 = [
       data: 'cities',
       output: 'select' // En fonction du code postal, on va rechercher dans le fichier cities, la ville correspondant et on ajoute un select avec ces villes
     }
+  }
+]
+
+export const page_3_culture = [
+  {
+    type: 'text',
+    label: 'Culture',
+    name: 'culture',
+    rules: {required: true}
+  }
+]
+
+export const page_3_sport= [
+  {
+    type: 'text',
+    label: 'Sport',
+    name: 'sport',
+    rules: {required: true}
   }
 ]

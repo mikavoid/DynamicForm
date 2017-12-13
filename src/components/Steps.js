@@ -1,8 +1,9 @@
 // Shows every pages
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
 import StepsPage from './StepsPage'
-import steps from '../data/steps'
+import steps, { getStep } from '../data/steps'
 
 class Steps extends Component
 {
@@ -19,11 +20,10 @@ class Steps extends Component
 
   getPageInfos() {
     if (!steps[this.state.currentPageNumber]) return null
-    return steps[this.state.currentPageNumber]
+    return getStep(this.state.currentPageNumber, this.props.form.dossier && this.props.form.dossier.values ? this.props.form.dossier.values : [] )
   }
 
   printButtons() {
-    console.log('btns', this.state.currentPageNumber)
     const backButton = this.state.currentPageNumber ? <button className="left red white-text btn flat-btn" onClick={this.previousPage}>Back</button> : ''
     const submitButton = !steps[this.state.currentPageNumber + 1] ? <button type="submit" className="right white-text btn flat-btn">Submit</button> : <button type="submit" className="right white-text btn flat-btn" onClick={this.nextPage}>Next</button>
     return (
@@ -60,6 +60,11 @@ class Steps extends Component
   }
 }
 
+function mapStateToProps(state) {
+  return { form: state.form }
+}
+
 export default reduxForm({
-  form: 'dossier'
-})(Steps)
+  form: 'dossier',
+  destroyOnUnmount: false
+})(connect(mapStateToProps)(Steps))
