@@ -23,24 +23,25 @@ class Steps extends Component
     return getStep(this.state.currentPageNumber, this.props.form.dossier && this.props.form.dossier.values ? this.props.form.dossier.values : [] )
   }
 
-  printButtons() {
-    const backButton = this.state.currentPageNumber ? <button className="left red white-text btn flat-btn" onClick={this.previousPage}>Retour</button> : ''
-    const submitButton = !steps[this.state.currentPageNumber + 1] ? <button type="submit" className="right white-text btn flat-btn">Soumettre</button> : <button type="submit" className="right white-text btn flat-btn" onClick={this.nextPage}>Suivant</button>
-    return (
-      <div style={{marginTop: '20px'}}>
-         {submitButton}
-         {backButton}
-      </div>
-    )
-  }
+  // printButtons() {
+  //   const backButton = this.state.currentPageNumber ? <button className="left red white-text btn flat-btn" onClick={this.previousPage}>Retocur</button> : ''
+  //   const submitButton = !steps[this.state.currentPageNumber + 1] ? <button type="submit" className="right white-text btn flat-btn">Soumettcre</button> : <button type="submit" className="right white-text btn flat-btn" onClick={this.nextPage}>Suivacnt</button>
+  //   return (
+  //     <div style={{marginTop: '20px'}}>
+  //        {submitButton}
+  //        {backButton}
+  //     </div>
+  //   )
+  // }
 
   nextPage() {
     return this.setState({currentPageNumber: this.state.currentPageNumber + 1})
   }
 
-  previousPage() {
+  previousPage(e) {
+    e && e.preventDefault()
     if (this.state.currentPageNumber <= 0) return
-    return this.setState({currentPageNumber: this.state.currentPageNumber - 1})
+    return this.setState({currentPageNumber: this.state.currentPageNumber - 1}, () => console.log('after', this.state.currentPageNumber))
   }
 
   render() {
@@ -48,12 +49,13 @@ class Steps extends Component
     return (
       <div>
           <StepsPage 
+            lastPage={lastPage}
             page={this.getPageInfos()} 
             pageNumber={this.state.currentPageNumber}
             previousPage={this.previousPage}
-            onSubmit={lastPage ? this.onSubmit : this.nextPage} 
+            onSubmit={!lastPage ? this.nextPage : this.onSubmit} 
           />
-          {this.printButtons()}
+          {/* {this.printButtons()} */}
       </div>
     )
   }

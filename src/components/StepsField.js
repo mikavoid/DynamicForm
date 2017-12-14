@@ -74,56 +74,61 @@ class StepsField extends Component
   }
 
   getInput() {
-    const { input, label, sources, meta, _type, items } = this.props
+    const { input, label, sources, meta, _type, items, dynLabel } = this.props
+    let element = ''
     switch (_type) {
       case 'file':
       case 'text' :
-      return (
+      element = (
         <div className="input-field validate">
           <input id={input.name} type={_type} {...input}/>
-          <label htmlFor={input.name}>{label}</label>
+          {/* <label htmlFor={input.name}>{label}</label> */}
         </div>
       )
+      return this.buildRow(label, meta, element)
       break
       case 'checkbox' :
-      const element = (
+      element = (
         <p>
           <input id={input.name} type="checkbox" {...input}/>
           <label htmlFor={input.name}>{label}</label>
         </p>
       )
-      return this.buildRow(label, element)
+      return this.buildRow(label, meta, element)
       break
       case 'checkboxes' :
-      return this.buildRow(label, this.renderItems(items, input))
+      return this.buildRow(label, meta, this.renderItems(items, input))
       break
       case 'radio' :
-      return this.buildRow(label, this.renderRadios(items, input))
+      return this.buildRow(label, meta, this.renderRadios(items, input))
       break
       case 'select' :
-      return this.buildRow(label, <select {...input} className="browser-default">{this.renderOptions(items, input)}</select>)
+      return this.buildRow(label, meta, <select {...input} className="browser-default">{this.renderOptions(items, input)}</select>)
       case 'textarea' :
-      return this.buildRow(label, <textarea {...input} className="materialize-textarea"></textarea>)
+      return this.buildRow(label, meta, <textarea {...input} className="materialize-textarea"></textarea>)
       break
       case 'text_dynamic':
       if (!sources.data) break
+      const errors = meta.touched && meta.error ? <p className="validation-error">{meta.error}</p> : ''
       // Qand on change le champ de selection (par exemple code postal)
       const _onChange = (event) => {
         let value = event.target.value
-        const filtered = this.state[sources.data].filter((c) => c.cp.indexOf(value) === 0)
+        const filtered = this.state[sources.data].filter((c) => value.length > 1 && c.cp.indexOf(value) === 0)
         return this.setState({filtered}, () => input.onChange(value))
       }
 
       // Quand on selectionne le resultat de la recherche json par exemple le select ville
-      const _onDynChange = (event) => input.onChange(`${input.value} ${event.target.value}`)
+      const _onDynChange = (event) => input.onChange(`${event.target.value}`)
 
       // Génerer le champ synamique (par exemple le select ville)
       const _renderDynElem = () => {
-        const items = this.state.filtered ? this.state.filtered.map((c) => <option selected={input.value.indexOf(c.name) !== -1} key={c.name} value={c.name}>{c.name}</option>) : []
+        const items = this.state.filtered ? this.state.filtered.map((c) => <option selected={input.value.indexOf(c.name) !== -1} key={c.name} value={c.cp + ' - ' + c.name}>{c.name}</option>) : []
+        if (!items.length && input.value.length) return <p className="validation-error">Votre code postal semble ne correspondre à aucunes des villes éligibles</p>
+        if (!items.length) return <p>Aucune ville correspondante</p>
         return (
           <div>
           <select name="x" className="browser-default" onChange={_onDynChange}>
-            <option value="">Sélectionnez votre ville</option>
+            <option style={{fontWeight:'normal'}} value="">--- Sélectionnez votre ville ---</option>
             {items}
           </select>
           </div>
@@ -131,13 +136,23 @@ class StepsField extends Component
       }
 
       // Le render final
-      return (
-        <div className="input-field validate">
-          <input type='text' id={input.name + '_dyn'} name={input.name + '_dyn'} value={input.value.split(' ')[0] || ''} onChange={_onChange}/>
-          <input type='hidden' id={input.name} name={input.name} {...input}/>
-          <label htmlFor={input.name}>{label}</label>
-          {_renderDynElem()}
+     return (
+      <div>
+        <div className="flex-row">
+        <h5>{label}</h5>
+          <div className={errors ? 'hasError' : ''}>
+            <input type='text' id={input.name + '_dyn'} name={input.name + '_dyn'} value={input.value.split(' ')[0] || ''} onChange={_onChange}/>
+            <input type='hidden' id={input.name} name={input.name} {...input}/>
+          </div>
         </div>
+        <div className="flex-row">
+        <h5>{dynLabel}</h5>
+          <div className={errors ? 'hasError' : ''}>
+          {_renderDynElem()}
+          {errors}
+          </div>
+        </div>
+      </div>
       )
       default: return (
         // Separator
@@ -148,12 +163,15 @@ class StepsField extends Component
     }
   }
 
-  buildRow(label, elem) {
+  buildRow(label, meta, elem) {
+    console.log('laabell', label, meta)
+    const errors = meta.touched && meta.error ? <p className="validation-error">{meta.error}</p> : ''
     return (
       <div className="flex-row">
         <h5>{label}</h5>
-        <div>
+        <div className={errors ? 'hasError' : ''}>
           {elem}
+          {errors}
         </div>
       </div>
     )

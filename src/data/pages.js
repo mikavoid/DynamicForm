@@ -19,7 +19,7 @@ export const page_1 = [
   {
     type: 'text',
     label: 'Vous remplissez une demande de dotation par le fonds Alès Mécénat. Quel est le nom de la structure ?',
-    name: 'nom_structure',
+    name: 'nomStructure',
     rules: {required: true},
     errors: {
       required: 'Merci de bien vouloir renseigner le nom de votre structure.'
@@ -28,7 +28,7 @@ export const page_1 = [
   {
     type: 'radio',
     label: 'Vous structure est-t-elle reconnue d\'intêret général ?',
-    name: 'interet_general',
+    name: 'interetGeneral',
     items: [
       {value: 'Oui'},
       {value: 'Non'}
@@ -45,10 +45,18 @@ export const page_2 = [
   {
     type: 'text_dynamic',
     label: 'Code postal de votre commune*',
-    name: 'code_postal',
-    rules: {required: true},
+    name: 'codePostal',
+    dyn_label: 'Votre ville',
+    rules: {
+      required: true,
+      dyn : {
+        sep: ' - ',
+        count: 2
+      }
+    },
     errors: {
-      required: 'Merci de bien vouloir sélectionner votre code postal'
+      required: 'Merci de bien vouloir sélectionner votre code postal',
+      dyn: 'Merci de saisir une code postal et sélectionner une ville éligible'
     },
     sources: {
       data: 'cities',
