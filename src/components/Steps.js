@@ -24,10 +24,10 @@ class Steps extends Component
   }
 
   printButtons() {
-    const backButton = this.state.currentPageNumber ? <button className="left red white-text btn flat-btn" onClick={this.previousPage}>Back</button> : ''
-    const submitButton = !steps[this.state.currentPageNumber + 1] ? <button type="submit" className="right white-text btn flat-btn">Submit</button> : <button type="submit" className="right white-text btn flat-btn" onClick={this.nextPage}>Next</button>
+    const backButton = this.state.currentPageNumber ? <button className="left red white-text btn flat-btn" onClick={this.previousPage}>Retour</button> : ''
+    const submitButton = !steps[this.state.currentPageNumber + 1] ? <button type="submit" className="right white-text btn flat-btn">Soumettre</button> : <button type="submit" className="right white-text btn flat-btn" onClick={this.nextPage}>Suivant</button>
     return (
-      <div>
+      <div style={{marginTop: '20px'}}>
          {submitButton}
          {backButton}
       </div>

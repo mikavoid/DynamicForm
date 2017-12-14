@@ -6,13 +6,15 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import StepsField from './StepsField'
-// import steps from '../data/steps'
 
 class StepsPage extends Component
 {
   constructor(props) {
     super(props)
     this.state = {}
+    // Si depends_on
+    // Effacer dans les réponses toutes les valeurs 
+    // de ce numero etape qui ne sont pas du meme group
   }
 
   renderFields() {
@@ -23,7 +25,7 @@ class StepsPage extends Component
           _type={field.type}
           key={index}
           items={field.items || []} 
-          name={field.name} 
+          name={field._name || field.name} 
           label={field.label} 
           sources={field.sources || []}
           component={StepsField}

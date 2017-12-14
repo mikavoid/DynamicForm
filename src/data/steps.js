@@ -13,8 +13,16 @@ const getPageFields = (pageNum, depends_on = null, values) => {
 export const getStep = (num, values) => {
   const step = steps[num]
   const depends_on = steps[num].depends_on
-  console.log('getSTep', values)
   step.fields =  getPageFields(num, depends_on, values || [])
+
+  // Buil the _name : (num)_(depends_on)_(name)
+  steps.fields = step.fields.map((field, i) => {
+    const newObject = field
+    const depends_group = values[depends_on] || ''
+    newObject['_name'] = `${num}_${depends_group ? depends_group.trim() + '_': ''}${field.name}`.toLowerCase()
+    return newObject
+  })
+
   return step
 }
 
