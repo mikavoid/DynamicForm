@@ -34,13 +34,11 @@ class Steps extends Component
     )
   }
 
-  nextPage(e) {
-    e.preventDefault()
+  nextPage() {
     return this.setState({currentPageNumber: this.state.currentPageNumber + 1})
   }
 
-  previousPage(e) {
-    e.preventDefault()
+  previousPage() {
     if (this.state.currentPageNumber <= 0) return
     return this.setState({currentPageNumber: this.state.currentPageNumber - 1})
   }
@@ -49,12 +47,13 @@ class Steps extends Component
     const lastPage = !steps[this.state.currentPageNumber + 1]
     return (
       <div>
-        <form
-          onSubmit={lastPage ? this.props.handleSubmit(this.onSubmit) : this.nextPage}
-        >
-          <StepsPage page={this.getPageInfos()} pageNumber={this.state.currentPageNumber}/>
+          <StepsPage 
+            page={this.getPageInfos()} 
+            pageNumber={this.state.currentPageNumber}
+            previousPage={this.previousPage}
+            onSubmit={lastPage ? this.onSubmit : this.nextPage} 
+          />
           {this.printButtons()}
-        </form>
       </div>
     )
   }

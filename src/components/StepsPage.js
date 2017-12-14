@@ -7,6 +7,8 @@ import _ from 'lodash'
 
 import StepsField from './StepsField'
 
+let FIELDS = []
+
 class StepsPage extends Component
 {
   constructor(props) {
@@ -50,12 +52,31 @@ class StepsPage extends Component
 
   render() {
     const { page, pageNumber, form } = this.props
+    FIELDS = this.props.page.fields
     return (
       <div className={`page_${pageNumber}`}>
+      <form onSubmit={this.props.handleSubmit}>
         {this.renderPage(page)}
+        <button type="submit">should validate</button>
+      </form>
       </div>
       )
   }
+}
+
+function validate(values) {
+  console.log("validate", values)
+  const err = {}
+  _.each(FIELDS, ({ _name, rules: { required, mustBe }, errors }) => {
+    console.log('mustBe', mustBe)
+    console.log('values name', values[_name])
+    // Required validation
+    if (required && !values[_name]) err[_name] = errors.required || 'Champ obigatoire'
+    // mustBe validation
+    if (mustBe && values[_name] !== mustBe) err[_name] = errors.mustBe || 'Ce choix est impossible'
+  })
+  console.log('Errors found:', err)
+  return err
 }
 
 function mapStateToProps({ form }) {
@@ -63,6 +84,8 @@ function mapStateToProps({ form }) {
 }
 
 export default reduxForm({
+  validate,
   form: 'dossier',
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true
 })(connect(mapStateToProps)(StepsPage))
